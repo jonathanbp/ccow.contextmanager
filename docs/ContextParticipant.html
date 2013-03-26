@@ -1,0 +1,53 @@
+<!DOCTYPE html>  <html> <head>   <title>ContextParticipant.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="Context.html">                 Context.coffee               </a>                                           <a class="source" href="ContextManager.html">                 ContextManager.coffee               </a>                                           <a class="source" href="ContextParticipant.html">                 ContextParticipant.coffee               </a>                                           <a class="source" href="Utilities.html">                 Utilities.coffee               </a>                                           <a class="source" href="app.html">                 app.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               ContextParticipant.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nv">http = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;http&#39;</span><span class="p">)</span>
+<span class="nv">url = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">)</span>
+<span class="nv">Q = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;q&#39;</span><span class="p">)</span>
+<span class="nv">formatter = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;./Utilities.js&#39;</span><span class="p">).</span><span class="nx">formatter</span>
+
+<span class="k">class</span> <span class="nx">ContextParticipant</span>
+
+  <span class="nv">constructor: </span><span class="nf">(@coupon,@applicationName) -&gt;</span>
+
+  <span class="nv">ContextChangesPending: </span><span class="nf">(contextCoupon) -&gt;</span>
+    <span class="nx">@log</span><span class="p">(</span><span class="s">&quot;ContextChangesPending (accept&#39;ed)&quot;</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>return decision => accept|conditionally_accept, reason (empty if accept)</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="p">{</span> <span class="nv">decision: </span><span class="s">&quot;accept&quot;</span><span class="p">,</span> <span class="nv">reason: </span><span class="s">&quot;&quot;</span> <span class="p">}</span>
+
+  <span class="nv">ContextChangesAccepted: </span><span class="nf">(contextCoupon) -&gt;</span>
+    <span class="nx">@log</span><span class="p">(</span><span class="s">&quot;ContextChangesAccepted(</span><span class="si">#{</span><span class="nx">contextCoupon</span><span class="si">}</span><span class="s">)&quot;</span><span class="p">)</span>
+
+  <span class="nv">ContextChangesCanceled: </span><span class="nf">(contextCoupon) -&gt;</span>
+    <span class="nx">@log</span><span class="p">(</span><span class="s">&quot;ContextChangesCanceled(</span><span class="si">#{</span><span class="nx">contextCoupon</span><span class="si">}</span><span class="s">)&quot;</span><span class="p">)</span>
+
+  <span class="nv">CommonContextTerminated: </span><span class="nf">() -&gt;</span>
+    <span class="nx">@log</span><span class="p">(</span><span class="s">&quot;CommonContextTerminated&quot;</span><span class="p">)</span>
+
+  <span class="nv">Ping: </span><span class="nf">() -&gt;</span> 
+    <span class="nx">@log</span><span class="p">(</span><span class="s">&quot;Ping. Pong.&quot;</span><span class="p">)</span>
+    <span class="s">&quot;Pong&quot;</span>
+
+  <span class="nv">log: </span><span class="nf">(msg) -&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">@applicationName</span><span class="si">}</span><span class="s"> (</span><span class="si">#{</span><span class="nx">@coupon</span><span class="si">}</span><span class="s">) -&gt; </span><span class="si">#{</span><span class="nx">msg</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nx">ContextParticipantProxy</span> <span class="k">extends</span> <span class="nx">ContextParticipant</span>
+
+  <span class="nv">constructor: </span><span class="nf">(@coupon,@applicationName,@url) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>this returns a promise</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">ContextChangesPending: </span><span class="nf">(contextCoupon) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>send request to callback url and return reply</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">@log</span><span class="p">(</span><span class="s">&quot;ContextChangesPending(</span><span class="si">#{</span><span class="nx">contextCoupon</span><span class="si">}</span><span class="s">) -- proxying to </span><span class="si">#{</span><span class="nx">@url</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+    <span class="nv">deferred = </span><span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">()</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">@url</span><span class="si">}</span><span class="s">/ContextParticipant/ContextChangesPending?contextCoupon=</span><span class="si">#{</span><span class="nx">contextCoupon</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="nv">chunks = </span><span class="s">&quot;&quot;</span>
+      <span class="nx">res</span><span class="p">.</span><span class="kc">on</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="nf">(chunk) -&gt;</span> <span class="nx">chunks</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">)</span>
+      <span class="nx">res</span><span class="p">.</span><span class="kc">on</span><span class="p">(</span><span class="s">&quot;end&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span>
+        <span class="nv">response = </span><span class="nx">formatter</span><span class="p">.</span><span class="nx">parseObject</span><span class="p">(</span><span class="nx">chunks</span><span class="p">)</span> 
+        <span class="nx">@log</span><span class="p">(</span><span class="s">&quot;received response &#39;</span><span class="si">#{</span><span class="nx">chunks</span><span class="si">}</span><span class="s">&#39; parsed into &#39;</span><span class="si">#{</span><span class="nx">response</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">)</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+      <span class="p">)</span>
+    <span class="p">).</span><span class="kc">on</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> 
+      <span class="nx">@log</span><span class="p">(</span><span class="s">&quot;received error </span><span class="si">#{</span><span class="nx">e</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span> <span class="nv">decision: </span><span class="s">&quot;error&quot;</span><span class="p">,</span> <span class="nv">reason: </span><span class="s">&quot;Could not contact &#39;</span><span class="si">#{</span><span class="nx">@applicationName</span><span class="si">}</span><span class="s">&#39; at &#39;</span><span class="si">#{</span><span class="nx">@url</span><span class="si">}</span><span class="s">&#39;.&quot;</span><span class="p">})</span> 
+    <span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>return promise</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span>
+
+
+    
+
+
+<span class="nv">exports.ContextParticipant = </span><span class="nx">ContextParticipant</span>
+<span class="nv">exports.ContextParticipantProxy = </span><span class="nx">ContextParticipantProxy</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

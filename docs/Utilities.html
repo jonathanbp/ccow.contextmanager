@@ -1,0 +1,95 @@
+<!DOCTYPE html>  <html> <head>   <title>Utilities.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="Context.html">                 Context.coffee               </a>                                           <a class="source" href="ContextManager.html">                 ContextManager.coffee               </a>                                           <a class="source" href="ContextParticipant.html">                 ContextParticipant.coffee               </a>                                           <a class="source" href="Utilities.html">                 Utilities.coffee               </a>                                           <a class="source" href="app.html">                 app.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               Utilities.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nv">_ = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;underscore&#39;</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>basic utilities</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">clone = </span><span class="nf">(obj) -&gt;</span>
+  <span class="k">if</span> <span class="o">not</span> <span class="nx">obj</span><span class="o">?</span> <span class="o">or</span> <span class="k">typeof</span> <span class="nx">obj</span> <span class="o">isnt</span> <span class="s">&#39;object&#39;</span>
+    <span class="k">return</span> <span class="nx">obj</span>
+
+  <span class="k">if</span> <span class="nx">obj</span> <span class="k">instanceof</span> <span class="nb">Date</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">getTime</span><span class="p">())</span> 
+
+  <span class="k">if</span> <span class="nx">obj</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+    <span class="nv">flags = </span><span class="s">&#39;&#39;</span>
+    <span class="nx">flags</span> <span class="o">+=</span> <span class="s">&#39;g&#39;</span> <span class="k">if</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">global</span><span class="o">?</span>
+    <span class="nx">flags</span> <span class="o">+=</span> <span class="s">&#39;i&#39;</span> <span class="k">if</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">ignoreCase</span><span class="o">?</span>
+    <span class="nx">flags</span> <span class="o">+=</span> <span class="s">&#39;m&#39;</span> <span class="k">if</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">multiline</span><span class="o">?</span>
+    <span class="nx">flags</span> <span class="o">+=</span> <span class="s">&#39;y&#39;</span> <span class="k">if</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">sticky</span><span class="o">?</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">source</span><span class="p">,</span> <span class="nx">flags</span><span class="p">)</span> 
+
+  <span class="nv">newInstance = </span><span class="k">new</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">constructor</span><span class="p">()</span>
+
+  <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">obj</span>
+    <span class="nx">newInstance</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">clone</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+
+  <span class="k">return</span> <span class="nx">newInstance</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>super class for all datatypes</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">Format</span>
+
+  <span class="nv">parseHAP: </span><span class="nf">(hap) -&gt;</span> <span class="nx">hap</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&quot;^&quot;</span><span class="p">)</span>
+  <span class="nv">generateHAP: </span><span class="nf">(hap) -&gt;</span> <span class="nx">hap</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&quot;^&quot;</span><span class="p">)</span>
+  <span class="nv">parseList: </span><span class="nf">(list) -&gt;</span> <span class="nx">list</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">)</span>
+  <span class="nv">generateList: </span><span class="nf">(list) -&gt;</span> <span class="nx">list</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">)</span>
+  <span class="nv">parseObject: </span><span class="nf">(obj) -&gt;</span> </pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>if it is a basic type simply return</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s">&quot;^&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s">&quot;&amp;&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">then</span> <span class="k">return</span> <span class="nx">obj</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>if compoun object, i.e. key1=value1&amp;key2=value2 ...</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s">&quot;&amp;&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+      <span class="nv">kvs = </span><span class="nx">obj</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&quot;&amp;&quot;</span><span class="p">)</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span>
+        <span class="nx">kvs</span><span class="p">,</span> 
+        <span class="p">((</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">kv</span><span class="p">)</span> <span class="o">=&gt;</span>
+          <span class="p">[</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">]</span> <span class="o">=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&quot;=&quot;</span><span class="p">)</span>
+          <span class="nx">memo</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">@parseObject</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+          <span class="nx">memo</span>
+        <span class="p">),</span>
+        <span class="p">{}</span>
+      <span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>if piped list, e.g. a|b|c</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">else</span> <span class="k">if</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+      <span class="nx">@parseList</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>if hatted, e.g. a^b^b</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">else</span> 
+      <span class="nx">@parseHAP</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+
+  <span class="nv">generateObject: </span><span class="nf">(obj) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>primitive type then to string</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">obj</span> <span class="o">isnt</span> <span class="s">&quot;object&quot;</span> <span class="k">then</span> <span class="k">return</span> <span class="nx">obj</span><span class="o">?</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">obj</span> <span class="k">instanceof</span> <span class="nb">Array</span>
+      <span class="nx">@generateList</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+    <span class="k">else</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span>
+        <span class="nx">obj</span><span class="p">,</span> 
+        <span class="p">((</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="o">=&gt;</span>
+          <span class="nx">memo</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">=</span><span class="si">#{</span><span class="nx">@generateObject</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span> 
+          <span class="nx">memo</span>
+        <span class="p">),</span>
+        <span class="p">[]</span>
+      <span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s">&quot;&amp;&quot;</span><span class="p">)</span>
+
+  <span class="nv">serialize: </span><span class="nf">() -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>CX</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">CX</span> <span class="k">extends</span> <span class="nx">Format</span>
+
+  <span class="nv">constructor: </span><span class="nf">(hap) -&gt;</span>
+    <span class="p">[</span>
+      <span class="nx">@id</span><span class="p">,</span>
+      <span class="nx">@checkdigit</span><span class="p">,</span>
+      <span class="nx">@checkdigitscheme</span><span class="p">,</span>
+      <span class="nx">@assigningauthority</span><span class="p">,</span>
+      <span class="nx">@identifiertypecode</span><span class="p">,</span>
+      <span class="nx">@assigningfacility</span><span class="p">,</span>
+      <span class="nx">@effectivedate</span><span class="p">,</span>
+      <span class="nx">@expirationdate</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="nx">@parseHAP</span><span class="p">(</span><span class="nx">hap</span><span class="p">)</span>
+
+  <span class="nv">serialize: </span><span class="nf">() -&gt;</span> 
+    <span class="nx">@generateHAP</span><span class="p">([</span>
+      <span class="nx">@id</span><span class="p">,</span>
+      <span class="nx">@checkdigit</span><span class="p">,</span>
+      <span class="nx">@checkdigitscheme</span><span class="p">,</span>
+      <span class="nx">@assigningauthority</span><span class="p">,</span>
+      <span class="nx">@identifiertypecode</span><span class="p">,</span>
+      <span class="nx">@assigningfacility</span><span class="p">,</span>
+      <span class="nx">@effectivedate</span><span class="p">,</span>
+      <span class="nx">@expirationdate</span>
+    <span class="p">])</span>
+
+<span class="nv">reply = </span><span class="nf">(formatter) -&gt;</span> 
+  <span class="nf">(req, res, data) -&gt;</span>
+    <span class="k">if</span> <span class="nx">data</span><span class="o">?</span><span class="p">.</span><span class="nx">status</span><span class="o">?</span> <span class="k">then</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">status</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">req</span><span class="p">.</span><span class="nx">accepts</span><span class="p">(</span><span class="s">&quot;json&quot;</span><span class="p">)</span><span class="o">?</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+    <span class="k">else</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">formatter</span><span class="p">.</span><span class="nx">generateObject</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+
+<span class="nv">formatter = </span><span class="k">new</span> <span class="nx">Format</span><span class="p">()</span>
+
+<span class="nv">module.exports = </span>
+  <span class="nv">formatter: </span><span class="nx">formatter</span>
+  <span class="nv">reply: </span><span class="nx">reply</span><span class="p">(</span><span class="nx">formatter</span><span class="p">)</span>
+  <span class="nv">clone: </span><span class="nx">clone</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
