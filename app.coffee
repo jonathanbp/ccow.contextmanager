@@ -54,7 +54,7 @@ app.get('/:interface', (req, res) ->
 
   logger.info "Invoking '#{req.query.method} on #{req.param('interface')}'"
 
-  Q.all(ifc.InvokeAndMapArgubbments(req.query.method, req.query))
+  Q.all(ifc.InvokeAndMapArguments(req.query.method, req.query))
   .then((result) -> 
       Util.reply(req, res, result)
   ).fail((err) -> 

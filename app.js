@@ -61,7 +61,7 @@
       return;
     }
     logger.info("Invoking '" + req.query.method + " on " + (req.param('interface')) + "'");
-    return Q.all(ifc.InvokeAndMapArgubbments(req.query.method, req.query)).then(function(result) {
+    return Q.all(ifc.InvokeAndMapArguments(req.query.method, req.query)).then(function(result) {
       return Util.reply(req, res, result);
     }).fail(function(err) {
       console.error(err);
