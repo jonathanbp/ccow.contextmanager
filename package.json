@@ -1,7 +1,7 @@
 {
   "name": "ccow.contextmanager",
   "description": "A simple CCOW context manager with no persistence.",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "bin": {
     "ctxmgr": "./app.coffee"
   },
@@ -14,5 +14,9 @@
     "prompt": "0.2.x",
     "winston": "~0.6.2",
     "q": "~0.9.2"
+  },
+  "devDependencies": {
+    "should": "~1.2.2",
+    "mocha": "~1.8.2"
   }
 }

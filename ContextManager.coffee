@@ -88,12 +88,23 @@ class ContextManager extends events.EventEmitter
     # call ContextChangesPending on all ContextParticipants
     responses = (participant.ContextChangesPending(contextCoupon) for participant in @context.participants)
 
+    defer = Q.defer()
+
+    Q.allResolved(responses)
+    .then(
+      (promises) ->
+        result = 
+          noContinue: false
+          responses: ((if promise.valueOf? then promise.valueOf() else promise) for promise in promises)
+        defer.resolve(result)
+    )
+
     # result is a structure w 2 props, noContinue and responses containing decisions
     result =
       noContinue: false
-      responses: @_.pluck(responses, "decision")
+      responses: responses
 
-    return result
+    return defer.promise
 
   PublishChangesDecision: (contextCoupon, decision) -> 
     context = @context.sessions[contextCoupon]

@@ -1,7 +1,7 @@
-http = require('http')
 url = require('url')
 Q = require('q')
 formatter = require('./Utilities.js').formatter
+winston = require 'winston'
 
 class ContextParticipant
 
@@ -15,8 +15,8 @@ class ContextParticipant
   ContextChangesAccepted: (contextCoupon) ->
     @log("ContextChangesAccepted(#{contextCoupon})")
 
-  ContextChangesCanceled: (contextCoupon) ->
-    @log("ContextChangesCanceled(#{contextCoupon})")
+  ContextChangesCancelled: (contextCoupon) ->
+    @log("ContextChangesCancelled(#{contextCoupon})")
 
   CommonContextTerminated: () ->
     @log("CommonContextTerminated")
@@ -26,18 +26,30 @@ class ContextParticipant
     "Pong"
 
   log: (msg) ->
-    console.log("#{@applicationName} (#{@coupon}) -> #{msg}")
+    #winston.info("#{@applicationName} (#{@coupon}) -> #{msg}")
 
 class ContextParticipantProxy extends ContextParticipant
 
-  constructor: (@coupon,@applicationName,@url) ->
+  constructor: (@coupon,@applicationName,@url,@http = require("http")) ->
+
+  ContextChangesAccepted: (contextCoupon) ->
+    @get("ContextChangesAccepted", contextCoupon)
+
+  ContextChangesCancelled: (contextCoupon) ->
+    @get("ContextChangesCancelled", contextCoupon)
+
+  CommonContextTerminated: (contextCoupon) ->
+    @get("CommonContextTerminated", contextCoupon)
 
   # this returns a promise
   ContextChangesPending: (contextCoupon) ->
+    @get("ContextChangesPending", contextCoupon)
+
+  get: (method, contextCoupon) ->
     # send request to callback url and return reply
     @log("ContextChangesPending(#{contextCoupon}) -- proxying to #{@url}")
     deferred = Q.defer()
-    http.get("#{@url}/ContextParticipant/ContextChangesPending?contextCoupon=#{contextCoupon}", (res) =>
+    @http.get("#{@url}/ContextParticipant/#{method}?contextCoupon=#{contextCoupon}", (res) =>
       chunks = ""
       res.on("data", (chunk) -> chunks += chunk)
       res.on("end", () =>
@@ -52,10 +64,6 @@ class ContextParticipantProxy extends ContextParticipant
 
     # return promise
     deferred.promise
-
-
-    
-
 
 exports.ContextParticipant = ContextParticipant
 exports.ContextParticipantProxy = ContextParticipantProxy

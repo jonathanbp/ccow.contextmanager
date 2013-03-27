@@ -98,7 +98,7 @@
     };
 
     ContextManager.prototype.EndContextChanges = function(contextCoupon) {
-      var participant, responses, result;
+      var defer, participant, responses, result;
       if (this.context.sessions[contextCoupon] == null) {
         throw new {
           status: 501,
@@ -127,11 +127,28 @@
         }
         return _results;
       }).call(this);
+      defer = Q.defer();
+      Q.allResolved(responses).then(function(promises) {
+        var promise, result;
+        result = {
+          noContinue: false,
+          responses: (function() {
+            var _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = promises.length; _i < _len; _i++) {
+              promise = promises[_i];
+              _results.push(promise.valueOf != null ? promise.valueOf() : promise);
+            }
+            return _results;
+          })()
+        };
+        return defer.resolve(result);
+      });
       result = {
         noContinue: false,
-        responses: this._.pluck(responses, "decision")
+        responses: responses
       };
-      return result;
+      return defer.promise;
     };
 
     ContextManager.prototype.PublishChangesDecision = function(contextCoupon, decision) {
