@@ -100,7 +100,7 @@
               method: "ContextChangesAccepted"
             },
             args: {
-              contextCoupon: contextCoupon
+              contextCoupon: ""
             }
           });
         }
@@ -108,7 +108,7 @@
         for (_j = 0, _len = _ref2.length; _j < _len; _j++) {
           participant = _ref2[_j];
           if (participant.coupon !== participantCoupon) {
-            participant.ContextChangesAccepted(contextCoupon);
+            participant.ContextChangesAccepted("");
           }
         }
       }

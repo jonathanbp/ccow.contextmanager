@@ -171,7 +171,7 @@
             method: accepted ? "ContextChangesAccepted" : "ContextChangesCancelled"
           },
           args: {
-            contextCoupon: contextCoupon
+            contextCoupon: contextCoupon || ""
           }
         });
       }
@@ -180,9 +180,9 @@
         participant = _ref[_i];
         if (participant.coupon !== (context != null ? context.owner : void 0)) {
           if (accepted) {
-            participant.ContextChangesAccepted(contextCoupon);
+            participant.ContextChangesAccepted(contextCoupon || "");
           } else {
-            participant.ContextChangesCancelled(contextCoupon);
+            participant.ContextChangesCancelled(contextCoupon || "");
           }
         }
       }

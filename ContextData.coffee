@@ -55,11 +55,11 @@ class ContextData extends events.EventEmitter
           interface: "ContextParticipant"
           method: "ContextChangesAccepted" 
         args:
-          contextCoupon: contextCoupon
+          contextCoupon: ""
       )
 
       # invoke ContextChangesAccepted on all participants
-      participant.ContextChangesAccepted(contextCoupon) for participant in @participants when participant.coupon isnt participantCoupon
+      participant.ContextChangesAccepted("") for participant in @participants when participant.coupon isnt participantCoupon
 
     # return current items
     items

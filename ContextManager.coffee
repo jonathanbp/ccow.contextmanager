@@ -124,10 +124,10 @@ class ContextManager extends events.EventEmitter
         interface: "ContextParticipant"
         method: if accepted then "ContextChangesAccepted" else "ContextChangesCancelled"
       args:
-        contextCoupon: contextCoupon
+        contextCoupon: contextCoupon || ""
     )
     # call ContextChangesAccepted/Cancelled on all ContextParticipants
-    ((if accepted then participant.ContextChangesAccepted(contextCoupon) else participant.ContextChangesCancelled(contextCoupon)) for participant in @context.participants when participant.coupon isnt context?.owner)
+    ((if accepted then participant.ContextChangesAccepted(contextCoupon || "") else participant.ContextChangesCancelled(contextCoupon || "")) for participant in @context.participants when participant.coupon isnt context?.owner)
     return
 
   GetMostRecentContextCoupon: () -> @context.latestContextCoupon
