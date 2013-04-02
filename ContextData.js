@@ -13,11 +13,12 @@
 
     __extends(ContextData, _super);
 
-    function ContextData(name, participants, items) {
+    function ContextData(name, participants, items, notifier) {
       var _this = this;
       this.name = name;
-      this.participants = participants;
-      this.items = items;
+      this.participants = participants != null ? participants : [];
+      this.items = items != null ? items : {};
+      this.notifier = notifier;
       this.SetItemValues = function(participantCoupon, itemNames, itemValues, contextCoupon) {
         return ContextData.prototype.SetItemValues.apply(_this, arguments);
       };
@@ -28,8 +29,6 @@
         return ContextData.prototype.GetItemNames.apply(_this, arguments);
       };
       this._ = require('underscore');
-      this.participants || (this.participants = []);
-      this.items || (this.items = {});
       this.sessions = {};
     }
 
@@ -70,7 +69,7 @@
     };
 
     ContextData.prototype.SetItemValues = function(participantCoupon, itemNames, itemValues, contextCoupon) {
-      var i, items, _fn, _i, _ref, _ref1,
+      var i, items, participant, _fn, _i, _j, _len, _ref, _ref1, _ref2,
         _this = this;
       items = ((_ref = this.sessions[contextCoupon]) != null ? _ref.items : void 0) || this.items;
       if (!((itemNames != null) && (itemValues != null) && (participantCoupon != null))) {
@@ -93,6 +92,26 @@
         _fn(i);
       }
       this.emit("updated", this, itemNames, itemValues, participantCoupon);
+      if (contextCoupon == null) {
+        if (typeof this.notifier === "function") {
+          this.notifier({
+            target: {
+              "interface": "ContextParticipant",
+              method: "ContextChangesAccepted"
+            },
+            args: {
+              contextCoupon: contextCoupon
+            }
+          });
+        }
+        _ref2 = this.participants;
+        for (_j = 0, _len = _ref2.length; _j < _len; _j++) {
+          participant = _ref2[_j];
+          if (participant.coupon !== participantCoupon) {
+            participant.ContextChangesAccepted(contextCoupon);
+          }
+        }
+      }
       return items;
     };
 

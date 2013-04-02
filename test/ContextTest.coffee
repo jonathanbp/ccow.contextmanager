@@ -18,7 +18,7 @@ try
     context.SetItemValues("idontexist", ["a"], [1])
     should.fail
   catch err
-    winston.error err
+    winston.error err?.msg || err
     should.not.fail
   
   # add participant

@@ -12,10 +12,12 @@ logger = require('winston')
 ContextData = require('./ContextData.js').ContextData
 ContextManager = require('./ContextManager.js').ContextManager
 
+notifier = (msg) -> io.sockets.emit("message", msg)
 
-defaultcontext = new ContextData("default")
+defaultcontext = new ContextData("default", [], {}, notifier)
 defaultcontext.on("updated",()->logger.debug("UPDATED!"))
-defaultcontextmanager = new ContextManager(defaultcontext, (msg) -> io.sockets.emit("message", msg))
+
+defaultcontextmanager = new ContextManager(defaultcontext, notifier)
 
 interfaces =
   contextdata: defaultcontext

@@ -66,6 +66,7 @@ class ContextManager extends events.EventEmitter
       items: clone(@context.items)
       active: true
       coupon: contextCoupon
+      owner: participantCoupon
 
     @context.sessions[contextCoupon] = context 
     return contextCoupon
@@ -86,23 +87,22 @@ class ContextManager extends events.EventEmitter
     )
 
     # call ContextChangesPending on all ContextParticipants
-    responses = (participant.ContextChangesPending(contextCoupon) for participant in @context.participants)
+    responses = (participant.ContextChangesPending(contextCoupon) for participant in @context.participants when participant.coupon isnt @context.sessions[contextCoupon]?.owner)
 
     defer = Q.defer()
 
-    Q.allResolved(responses)
-    .then(
-      (promises) ->
-        result = 
-          noContinue: false
-          responses: ((if promise.valueOf? then promise.valueOf() else promise) for promise in promises)
-        defer.resolve(result)
-    )
-
-    # result is a structure w 2 props, noContinue and responses containing decisions
-    result =
-      noContinue: false
-      responses: responses
+    if responses.length > 0
+      Q.allResolved(responses)
+      .then(
+        (promises) ->
+          result = 
+            noContinue: false
+            responses: ((if promise.valueOf? then promise.valueOf() else promise) for promise in promises)
+          defer.resolve(result)
+      )
+    else
+      # resolve w no responses
+      defer.resolve({ noContinue: false, responses: []})
 
     return defer.promise
 
@@ -127,7 +127,7 @@ class ContextManager extends events.EventEmitter
         contextCoupon: contextCoupon
     )
     # call ContextChangesAccepted/Cancelled on all ContextParticipants
-    ((if accepted then participant.ContextChangesAccepted(contextCoupon) else participant.ContextChangesCancelled(contextCoupon)) for participant in @context.participants)
+    ((if accepted then participant.ContextChangesAccepted(contextCoupon) else participant.ContextChangesCancelled(contextCoupon)) for participant in @context.participants when participant.coupon isnt context?.owner)
     return
 
   GetMostRecentContextCoupon: () -> @context.latestContextCoupon

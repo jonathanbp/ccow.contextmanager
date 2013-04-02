@@ -23,7 +23,7 @@
       context.SetItemValues("idontexist", ["a"], [1]);
       should.fail;
     } catch (err) {
-      winston.error(err);
+      winston.error((err != null ? err.msg : void 0) || err);
       should.not.fail;
     }
     context.participants.push({

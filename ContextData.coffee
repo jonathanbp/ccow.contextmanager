@@ -3,10 +3,8 @@ logger = require('winston')
 
 class ContextData extends events.EventEmitter
 
-  constructor: (@name, @participants, @items) ->
+  constructor: (@name, @participants = [], @items = {}, @notifier) ->
     @_ = require('underscore')  
-    @participants ||= []
-    @items ||= {}
     @sessions = {}
 
   InvokeAndMapArguments: (method, args) ->
@@ -47,6 +45,21 @@ class ContextData extends events.EventEmitter
     
     # emit updated event
     @emit("updated", this, itemNames, itemValues, participantCoupon)
+
+    # notify if contextCoupon isnt set
+    if not contextCoupon?
+
+      # invoke builtin notifier
+      @notifier?(
+        target:
+          interface: "ContextParticipant"
+          method: "ContextChangesAccepted" 
+        args:
+          contextCoupon: contextCoupon
+      )
+
+      # invoke ContextChangesAccepted on all participants
+      participant.ContextChangesAccepted(contextCoupon) for participant in @participants when participant.coupon isnt participantCoupon
 
     # return current items
     items

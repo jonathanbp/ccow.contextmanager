@@ -91,14 +91,15 @@
       context = {
         items: clone(this.context.items),
         active: true,
-        coupon: contextCoupon
+        coupon: contextCoupon,
+        owner: participantCoupon
       };
       this.context.sessions[contextCoupon] = context;
       return contextCoupon;
     };
 
     ContextManager.prototype.EndContextChanges = function(contextCoupon) {
-      var defer, participant, responses, result;
+      var defer, participant, responses;
       if (this.context.sessions[contextCoupon] == null) {
         throw new {
           status: 501,
@@ -118,36 +119,41 @@
         });
       }
       responses = (function() {
-        var _i, _len, _ref, _results;
+        var _i, _len, _ref, _ref1, _results;
         _ref = this.context.participants;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           participant = _ref[_i];
-          _results.push(participant.ContextChangesPending(contextCoupon));
+          if (participant.coupon !== ((_ref1 = this.context.sessions[contextCoupon]) != null ? _ref1.owner : void 0)) {
+            _results.push(participant.ContextChangesPending(contextCoupon));
+          }
         }
         return _results;
       }).call(this);
       defer = Q.defer();
-      Q.allResolved(responses).then(function(promises) {
-        var promise, result;
-        result = {
+      if (responses.length > 0) {
+        Q.allResolved(responses).then(function(promises) {
+          var promise, result;
+          result = {
+            noContinue: false,
+            responses: (function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = promises.length; _i < _len; _i++) {
+                promise = promises[_i];
+                _results.push(promise.valueOf != null ? promise.valueOf() : promise);
+              }
+              return _results;
+            })()
+          };
+          return defer.resolve(result);
+        });
+      } else {
+        defer.resolve({
           noContinue: false,
-          responses: (function() {
-            var _i, _len, _results;
-            _results = [];
-            for (_i = 0, _len = promises.length; _i < _len; _i++) {
-              promise = promises[_i];
-              _results.push(promise.valueOf != null ? promise.valueOf() : promise);
-            }
-            return _results;
-          })()
-        };
-        return defer.resolve(result);
-      });
-      result = {
-        noContinue: false,
-        responses: responses
-      };
+          responses: []
+        });
+      }
       return defer.promise;
     };
 
@@ -172,10 +178,12 @@
       _ref = this.context.participants;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         participant = _ref[_i];
-        if (accepted) {
-          participant.ContextChangesAccepted(contextCoupon);
-        } else {
-          participant.ContextChangesCancelled(contextCoupon);
+        if (participant.coupon !== (context != null ? context.owner : void 0)) {
+          if (accepted) {
+            participant.ContextChangesAccepted(contextCoupon);
+          } else {
+            participant.ContextChangesCancelled(contextCoupon);
+          }
         }
       }
     };
