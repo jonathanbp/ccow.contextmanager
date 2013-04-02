@@ -26,7 +26,7 @@ class ContextParticipant
     "Pong"
 
   log: (msg) ->
-    #winston.info("#{@applicationName} (#{@coupon}) -> #{msg}")
+    winston.info("#{@applicationName} (#{@coupon}) -> #{msg}")
 
 class ContextParticipantProxy extends ContextParticipant
 

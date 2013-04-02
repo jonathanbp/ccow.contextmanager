@@ -21,7 +21,7 @@
       this.SetItemValues = function(participantCoupon, itemNames, itemValues, contextCoupon) {
         return ContextData.prototype.SetItemValues.apply(_this, arguments);
       };
-      this.GetItemValues = function(participantCoupon, itemNames, contextCoupon, onlyChanges) {
+      this.GetItemValues = function(participantCoupon, itemNames, onlyChanges, contextCoupon) {
         return ContextData.prototype.GetItemValues.apply(_this, arguments);
       };
       this.GetItemNames = function(contextCoupon) {
@@ -55,7 +55,7 @@
       return this._.keys(items);
     };
 
-    ContextData.prototype.GetItemValues = function(participantCoupon, itemNames, contextCoupon, onlyChanges) {
+    ContextData.prototype.GetItemValues = function(participantCoupon, itemNames, onlyChanges, contextCoupon) {
       var items, _ref;
       if (onlyChanges) {
         throw {

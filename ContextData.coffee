@@ -12,7 +12,7 @@ class ContextData extends events.EventEmitter
   InvokeAndMapArguments: (method, args) ->
     switch method
       when "GetItemNames" then @GetItemNames(args.contextCoupon)
-      when "GetItemValues" then @GetItemValues(args.participantCoupon, args.itemNames.split("|"), args.onlyChanges?.toLowerCase() is 'true', args.contextCoupon)
+      when "GetItemValues" then @GetItemValues(args.participantCoupon, args.itemNames.split("|"), (args.onlyChanges?.toLowerCase() is 'true'), args.contextCoupon)
       when "SetItemValues" then @SetItemValues(args.participantCoupon, args.itemNames.split("|"), args.itemValues.split("|"), args.contextCoupon)
 
       else throw { msg: "No such method '#{method}' on Context" }
@@ -22,7 +22,7 @@ class ContextData extends events.EventEmitter
     items = @sessions[contextCoupon]?.items || @items
     @_.keys(items)
 
-  GetItemValues: (participantCoupon, itemNames, contextCoupon, onlyChanges) => 
+  GetItemValues: (participantCoupon, itemNames, onlyChanges, contextCoupon) => 
     if onlyChanges then throw { msg: "'onlyChanges' argument to GetItemValues with value true not currently supported", status: 501 }
     items = @sessions[contextCoupon]?.items || @items
     # do not remove null values

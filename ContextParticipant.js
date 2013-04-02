@@ -44,7 +44,9 @@
       return "Pong";
     };
 
-    ContextParticipant.prototype.log = function(msg) {};
+    ContextParticipant.prototype.log = function(msg) {
+      return winston.info("" + this.applicationName + " (" + this.coupon + ") -> " + msg);
+    };
 
     return ContextParticipant;
 
