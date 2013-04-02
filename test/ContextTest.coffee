@@ -1,5 +1,6 @@
 should = require('should')
 clone = require("../Utilities.js").clone
+winston = require 'winston'
 
 ContextData = require('../ContextData.js').ContextData
 
@@ -17,6 +18,7 @@ try
     context.SetItemValues("idontexist", ["a"], [1])
     should.fail
   catch err
+    winston.error err
     should.not.fail
   
   # add participant

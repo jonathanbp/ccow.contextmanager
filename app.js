@@ -42,7 +42,7 @@
     return Q.all(ifc.InvokeAndMapArguments(req.param('method'), req.query)).then(function(result) {
       return Util.reply(req, res, result);
     }).fail(function(err) {
-      logger.error(err);
+      logger.error((err != null ? err.msg : void 0) || err);
       return Util.reply(req, res, err);
     });
   });
@@ -64,7 +64,7 @@
     return Q.all(ifc.InvokeAndMapArguments(req.query.method, req.query)).then(function(result) {
       return Util.reply(req, res, result);
     }).fail(function(err) {
-      console.error(err);
+      logger.error((err != null ? err.msg : void 0) || err);
       return Util.reply(req, res, err);
     });
   });
@@ -81,7 +81,7 @@
     return Q.all(ifc.InvokeAndMapArguments(req.query.method, req.query)).then(function(result) {
       return Util.reply(req, res, result);
     }).fail(function(err) {
-      logger.error(err);
+      logger.error((err != null ? err.msg : void 0) || err);
       return Util.reply(req, res, err);
     });
   });

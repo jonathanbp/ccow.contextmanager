@@ -32,7 +32,7 @@ app.get('/:interface/:method', (req, res) ->
   .then((result) -> 
       Util.reply(req, res, result)
   ).fail((err) -> 
-      logger.error err
+      logger.error err?.msg || err
       Util.reply(req, res, err)
   )
 )
@@ -58,7 +58,7 @@ app.get('/:interface', (req, res) ->
   .then((result) -> 
       Util.reply(req, res, result)
   ).fail((err) -> 
-      console.error err
+      logger.error err?.msg || err
       Util.reply(req, res, err)
   )
 )
@@ -78,7 +78,7 @@ app.get('/', (req, res) ->
   .then((result) -> 
       Util.reply(req, res, result)
   ).fail((err) -> 
-      logger.error err
+      logger.error err?.msg || err
       Util.reply(req, res, err)
   )
 )
