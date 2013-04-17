@@ -5,6 +5,11 @@
   "bin": {
     "ctxmgr": "./app.coffee"
   },
+  "repository" : {
+    "type" : "git",
+    "url": "https://github.com/jonathanbp/ccow.contextmanager"
+  },
+  "homepage": "https://github.com/jonathanbp/ccow.contextmanager",
   "dependencies": {
     "express": "3.x",
     "node-uuid": "1.3.x",
