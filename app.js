@@ -21,6 +21,7 @@
   ContextManager = require('./ContextManager.js').ContextManager;
 
   notifier = function(msg) {
+    logger.info("emitting ", msg);
     return io.sockets.emit("message", msg);
   };
 

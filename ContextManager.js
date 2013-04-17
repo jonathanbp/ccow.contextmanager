@@ -107,6 +107,7 @@
         };
       }
       this.context.sessions[contextCoupon].active = false;
+      logger.debug(this.notifier);
       if (typeof this.notifier === "function") {
         this.notifier({
           target: {

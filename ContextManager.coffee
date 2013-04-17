@@ -77,6 +77,8 @@ class ContextManager extends events.EventEmitter
 
     @context.sessions[contextCoupon].active = false
 
+    logger.debug @notifier
+
     # invoke builtin notifier
     @notifier?(
       target:
