@@ -47,7 +47,7 @@ class ContextParticipantProxy extends ContextParticipant
 
   get: (method, contextCoupon) ->
     # send request to callback url and return reply
-    @log("ContextChangesPending(#{contextCoupon}) -- proxying to #{@url}")
+    @log("#{method}(#{contextCoupon}) -- proxying to #{@url}")
     deferred = Q.defer()
     @http.get("#{@url}/ContextParticipant/#{method}?contextCoupon=#{contextCoupon}", (res) =>
       chunks = ""

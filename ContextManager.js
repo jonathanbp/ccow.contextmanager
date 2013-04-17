@@ -62,7 +62,7 @@
       }
       participant = contextParticipant != null ? new ContextParticipantProxy(this.uuid.v4(), applicationName, contextParticipant) : new ContextParticipant(this.uuid.v4(), applicationName);
       participantInContext = this._.find(this.context.participants, function(p) {
-        return p.applicationName === participant.applicationName && p.callback === participant.callback;
+        return p.applicationName === participant.applicationName && p.url === participant.url;
       });
       if (participantInContext == null) {
         this.context.participants.push(participant);

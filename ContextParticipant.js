@@ -82,7 +82,7 @@
     ContextParticipantProxy.prototype.get = function(method, contextCoupon) {
       var deferred,
         _this = this;
-      this.log("ContextChangesPending(" + contextCoupon + ") -- proxying to " + this.url);
+      this.log("" + method + "(" + contextCoupon + ") -- proxying to " + this.url);
       deferred = Q.defer();
       this.http.get("" + this.url + "/ContextParticipant/" + method + "?contextCoupon=" + contextCoupon, function(res) {
         var chunks;

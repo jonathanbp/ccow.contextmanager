@@ -43,7 +43,7 @@ class ContextManager extends events.EventEmitter
         new ContextParticipant(@uuid.v4(), applicationName)
   
     # if the participant is already present use the saved participant
-    participantInContext = @_.find(@context.participants, (p) -> p.applicationName is participant.applicationName and p.callback is participant.callback)
+    participantInContext = @_.find(@context.participants, (p) -> p.applicationName is participant.applicationName and p.url is participant.url)
     if not participantInContext? 
       # save participant in context
       @context.participants.push(participant)
