@@ -33,9 +33,9 @@ class Format
   parseObject: (obj) -> 
     # if it is a basic type simply return
     if obj.indexOf("^") + obj.indexOf("|") + obj.indexOf("&") < 0 then return obj
-    # if compoun object, i.e. key1=value1&key2=value2 ...
+    # if compound object, i.e. key1=value1&key2=value2 ...
     if obj.indexOf("&") > 0
-      kvs = obj.split("&")
+      kvs = obj.split("&") or []
       _.reduce(
         kvs, 
         ((memo, kv) =>
