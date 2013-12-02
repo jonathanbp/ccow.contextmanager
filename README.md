@@ -46,6 +46,10 @@ Use the `ctxmgr` command which starts a server on port 3000.
 
 ## Changelog
 
+### 0.0.25 (2013-12-02)
+
+ * Fixing minor issue w serialization.
+
 ### 0.0.11-24
 
  * Frantic bug fixing.
