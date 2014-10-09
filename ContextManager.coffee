@@ -2,6 +2,8 @@ clone = require("./Utilities.js").clone
 events = require('events')
 Q = require('q')
 logger = require('winston')
+_ = require('lodash')
+uuid = require('node-uuid')
 
 ContextParticipant = require("./ContextParticipant.js").ContextParticipant
 ContextParticipantProxy = require("./ContextParticipant.js").ContextParticipantProxy
@@ -14,8 +16,6 @@ class ContextManager extends events.EventEmitter
 
   # Constructor saves *context* which this CM is responsible for and optionally a *notifier* which is expected to be a function which will be invoked when there are notifications. This is expected to be used in e.g. a websocket notifier.
   constructor: (@context, @notifier) ->
-    @uuid = require('node-uuid')
-    @_ = require('underscore')
 
 
   # A "dispatcher" which can invoke methods and map arguments.
@@ -38,12 +38,12 @@ class ContextManager extends events.EventEmitter
     # create participant
     participant = 
       if contextParticipant? 
-        new ContextParticipantProxy(@uuid.v4(), applicationName, contextParticipant)
+        new ContextParticipantProxy(uuid.v4(), applicationName, contextParticipant)
       else
-        new ContextParticipant(@uuid.v4(), applicationName)
+        new ContextParticipant(uuid.v4(), applicationName)
   
     # if the participant is already present use the saved participant
-    participantInContext = @_.find(@context.participants, (p) -> p.applicationName is participant.applicationName and p.url is participant.url)
+    participantInContext = _.find(@context.participants, (p) -> p.applicationName is participant.applicationName and p.url is participant.url)
     if not participantInContext? 
       # save participant in context
       @context.participants.push(participant)
@@ -57,11 +57,11 @@ class ContextManager extends events.EventEmitter
 
   LeaveCommonContext: (participantCoupon) ->
     if not participantCoupon? then throw { type: "MissingArg", msg: "'participantCoupon' is mandatory for LeaveCommonContext"}
-    @context.participants = @_.reject(@context.participants, (p) -> p.coupon is participantCoupon)
-    logger.info "#{participantCoupon} left context, current participants are now: #{@_.pluck(@context.participants, "coupon")}"
+    @context.participants = _.reject(@context.participants, (p) -> p.coupon is participantCoupon)
+    logger.info "#{participantCoupon} left context, current participants are now: #{_.pluck(@context.participants, "coupon")}"
 
   StartContextChanges: (participantCoupon) -> 
-    contextCoupon = @uuid.v4()
+    contextCoupon = uuid.v4()
     context = 
       items: clone(@context.items)
       active: true

@@ -21,7 +21,7 @@ class ContextParticipant
   CommonContextTerminated: () ->
     @log("CommonContextTerminated")
 
-  Ping: () -> 
+  Ping: () ->
     @log("Ping. Pong.")
     "Pong"
 

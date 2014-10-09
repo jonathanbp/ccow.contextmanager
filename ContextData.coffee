@@ -1,10 +1,10 @@
 events = require('events')
 logger = require('winston')
+_ = require('lodash')
 
 class ContextData extends events.EventEmitter
 
   constructor: (@name, @participants = [], @items = {}, @notifier) ->
-    @_ = require('underscore')  
     @sessions = {}
 
   InvokeAndMapArguments: (method, args) ->
@@ -18,13 +18,13 @@ class ContextData extends events.EventEmitter
 
   GetItemNames: (contextCoupon) => 
     items = @sessions[contextCoupon]?.items || @items
-    @_.keys(items)
+    _.keys(items)
 
   GetItemValues: (participantCoupon, itemNames, contextCoupon, onlyChanges) => 
     if onlyChanges then throw { msg: "'onlyChanges' argument to GetItemValues with value true not currently supported", status: 501 }
     items = @sessions[contextCoupon]?.items || @items
     # do not remove null values
-    @_.map(itemNames, (name) -> items[name])
+    _.map(itemNames, (name) -> items[name])
 
   SetItemValues: (participantCoupon, itemNames, itemValues, contextCoupon) => 
     items = @sessions[contextCoupon]?.items || @items
@@ -34,7 +34,7 @@ class ContextData extends events.EventEmitter
       throw { msg: "Required arguments for 'SetItemValues' are 'itemNames','itemValues' and 'participantCoupon'" }
     
     # check that participant is present in context
-    if not @_.any(@participants,(p)->p.coupon is participantCoupon)
+    if not _.any(@participants,(p)->p.coupon is participantCoupon)
       throw { msg: "No such participant '#{participantCoupon}'"}
 
     # updated all itemValues referred to in itemNames
