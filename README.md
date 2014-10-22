@@ -2,8 +2,6 @@
 
 This is an implementation in nodejs of a few of the interfaces in the [HL7 CCOW](http://en.wikipedia.org/wiki/CCOW) specification. Its purpose is to provide a functioning (and simple) ContextManager. 
 
-Current status is a very rough implementation - not suitable for production.
-
 Currently the ContextManager manages a single context and the following kind of flow is supported (CP is ContextParticipant and CM is ContextManager):
 
 
@@ -67,6 +65,10 @@ Use the `ctxmgr` command which starts a server on port 3000.
       responses: string[]
 
   from `ContextManager.EndContextChanges`.
+
+## Status
+
+Current status is a basic implementation of ContextManager, ContextParticipant and ContextData interface.
 
 ## License
 
