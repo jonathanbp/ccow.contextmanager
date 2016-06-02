@@ -1,8 +1,16 @@
 # CCOW ContextManager
 
+**
+UPDATE June 2016
+
+This project is continued by [Sirenia](http://sirenia.eu). If you are looking for a production-ready, battle-hardened and very, very cost-effective beast of a Context Manager then this is the place to go.
+
+**
+
 This is an implementation in nodejs of a few of the interfaces in the [HL7 CCOW](http://en.wikipedia.org/wiki/CCOW) specification. Its purpose is to provide a functioning (and simple) ContextManager. 
 
 Current status is a very rough implementation - not suitable for production.
+
 
 Currently the ContextManager manages a single context and the following kind of flow is supported (CP is ContextParticipant and CM is ContextManager):
 
