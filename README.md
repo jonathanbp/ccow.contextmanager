@@ -2,7 +2,7 @@
 
 **UPDATE JUNE 2016**
 
-This project is continued by [SIRENIA](http://sirenia.eu). If you are looking for a production-ready, battle-hardened and very, very cost-effective beast of a Context Manager then this is the place to go.
+This project is continued by [SIRENIA](http://sirenia.eu). If you are looking for a production-ready, battle-hardened and very, very cost-effective beast of a Context Manager [then](http://sirenia.eu) this is the place to go.
 
 ---
 
