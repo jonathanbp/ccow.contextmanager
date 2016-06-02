@@ -3,7 +3,7 @@
 app = require('express')()
 server = require('http').createServer(app)
 io = require('socket.io').listen(server)
-_ = require('underscore')
+_ = require('lodash')
 # Q is awesome beyond belief
 Q = require('q')
 Util = require('./Utilities.js')
