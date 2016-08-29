@@ -33,8 +33,11 @@ class ContextManager extends events.EventEmitter
 
   ###
   JoinCommonContext: (applicationName, contextParticipant) -> 
+    logger.info "app name = #{applicationName}"
     if not applicationName? then throw { type: "MissingArg", msg: "'applicationName' is mandatory for JoinCommonContext"}
     
+    logger.info "creating participant"
+
     # create participant
     participant = 
       if contextParticipant? 
@@ -51,6 +54,7 @@ class ContextManager extends events.EventEmitter
       # participant was already present, use existing
       participant = participantInContext
   
+    logger.info "returning coupon = #{participant.coupon}"
     # return participant coupon
     participant.coupon
 

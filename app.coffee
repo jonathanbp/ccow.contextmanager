@@ -32,8 +32,9 @@ app.get('/:interface/:method', (req, res) ->
 
   logger.info "Invoking '#{req.param('method')}' on '#{req.param('interface')}'"
 
-  Q.all(ifc.InvokeAndMapArguments(req.param('method'), req.query))
-  .then((result) -> 
+  Q.all([].concat(ifc.InvokeAndMapArguments(req.param('method'), req.query)))
+  .then((result) ->
+      logger.info "replying #{result}"
       Util.reply(req, res, result)
   ).fail((err) -> 
       logger.error err?.msg || err
@@ -58,7 +59,7 @@ app.get('/:interface', (req, res) ->
 
   logger.info "Invoking '#{req.query.method} on #{req.param('interface')}'"
 
-  Q.all(ifc.InvokeAndMapArguments(req.query.method, req.query))
+  Q.all([].concat(ifc.InvokeAndMapArguments(req.query.method, req.query)))
   .then((result) -> 
       Util.reply(req, res, result)
   ).fail((err) -> 
@@ -78,7 +79,7 @@ app.get('/', (req, res) ->
 
   ifc = interfaces[req.query.interface.toLowerCase()]
 
-  Q.all(ifc.InvokeAndMapArguments(req.query.method, req.query))
+  Q.all([].concat(ifc.InvokeAndMapArguments(req.query.method, req.query)))
   .then((result) -> 
       Util.reply(req, res, result)
   ).fail((err) -> 
